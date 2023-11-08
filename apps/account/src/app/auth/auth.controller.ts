@@ -1,5 +1,5 @@
 import { Body, Controller } from '@nestjs/common';
-import { AccountLogin, AccountRegister } from '../../../../../libs/contracts/src';
+import { AccountLogin, AccountRegister } from '@purple/contracts';
 import { RMQRoute, RMQValidate } from 'nestjs-rmq';
 import { AuthService } from './auth.service';
 

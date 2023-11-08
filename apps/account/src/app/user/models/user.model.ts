@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IUser, UserRole } from '../../../../../../libs/interfaces/src';
+import { IUser, UserRole } from '@purple/interfaces';
 import { Document } from 'mongoose';
 
 @Schema()

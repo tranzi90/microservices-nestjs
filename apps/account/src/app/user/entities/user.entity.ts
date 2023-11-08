@@ -1,4 +1,4 @@
-import { IUser, UserRole } from '../../../../../../libs/interfaces/src';
+import { IUser, UserRole } from '@purple/interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {

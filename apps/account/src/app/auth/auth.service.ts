@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AccountRegister } from '../../../../../libs/contracts/src';
-import { UserRole } from '../../../../../libs/interfaces/src';
+import { AccountRegister } from '@purple/contracts';
+import { UserRole } from '@purple/interfaces';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserRepository } from '../user/repositories/user.repository';
 
