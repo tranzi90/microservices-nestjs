@@ -1,21 +1,19 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import {IsString} from 'class-validator';
+import {IUser} from "@purple/interfaces";
 
 export namespace AccountChangeProfile {
 	export const topic = 'account.change-profile.command';
 
 	export class Request {
-    @IsOptional()
-    @IsEmail()
-		email?: string;
+    @IsString()
+    id: string;
 
-		@IsOptional()
 		@IsString()
-		displayName?: string;
+		user: Pick<IUser, 'displayName'>;
 	}
 
 	export class Response {
-		email: string;
-    displayName: string;
+
 	}
 }
 
