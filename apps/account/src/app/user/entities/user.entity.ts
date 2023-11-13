@@ -1,4 +1,5 @@
-import { IUser, IUserCourses, PurchaseState, UserRole } from '@purple/interfaces';
+import { AccountChangedCourse } from '@purple/contracts';
+import { IDomainEvent, IUser, IUserCourses, PurchaseState, UserRole } from '@purple/interfaces';
 import { compare, genSalt, hash } from 'bcryptjs';
 
 export class UserEntity implements IUser {
@@ -8,6 +9,7 @@ export class UserEntity implements IUser {
 	passwordHash: string;
 	role: UserRole;
 	courses?: IUserCourses[];
+	events: IDomainEvent[] = [];
 
 	constructor(user: IUser) {
 		this._id = user._id;
@@ -18,29 +20,31 @@ export class UserEntity implements IUser {
 		this.courses = user.courses;
 	}
 
-	public addCourse(courseId: string) {
+	public setCourseStatus(courseId: string, state: PurchaseState) {
 		const exist = this.courses.find(c => c._id === courseId);
-		if (exist) {
-			throw new Error('Добавляемый курс уже существует');
+		if (!exist) {
+			this.courses.push({
+				courseId,
+				purchaseState: state
+			});
+			return this;
 		}
-		this.courses.push({
-			courseId,
-			purchaseState: PurchaseState.Started
-		});
-	}
-
-	public deleteCourse(courseId: string) {
-		this.courses = this.courses.filter(c => c._id !== courseId);
-	}
-
-	public updateCourseStatus(courseId: string, state: PurchaseState) {
+		if (state === PurchaseState.Cenceled) {
+			this.courses = this.courses.filter(c => c._id !== courseId);
+			return this;
+		}
 		this.courses = this.courses.map(c => {
 			if (c._id === courseId) {
 				c.purchaseState = state;
 				return c;
 			}
 			return c;
-		})
+		});
+		this.events.push({
+			topic: AccountChangedCourse.topic,
+			data: { courseId, userId: this._id, state }
+		});
+		return this;
 	}
 
 	public getPublicProfile() {
